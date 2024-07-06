@@ -9,7 +9,7 @@ export const publicRoutes = ['/'];
  * This routes will redirect logged in users to the default login redirect path.
  * @type {string[]}
  */
-export const authRoutes = ['/auth/login', '/auth/register'];
+export const authRoutes = ['/auth/login', '/auth/register', '/auth/error'];
 
 /**
  * Prefix for API Authentication Routes
