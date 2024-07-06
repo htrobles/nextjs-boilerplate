@@ -19,6 +19,7 @@ import { FormSuccess } from '../formSuccess';
 import { useState, useTransition } from 'react';
 import { z } from 'zod';
 import { register } from '@/actions/register';
+import { LOGIN_PATH } from '@/routes';
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>('');
@@ -29,6 +30,7 @@ export const RegisterForm = () => {
     defaultValues: {
       email: '',
       password: '',
+      confirmPassword: '',
       name: '',
     },
   });
@@ -49,7 +51,7 @@ export const RegisterForm = () => {
     <CardWrapper
       headerLabel='Create an account'
       backButtonLabel='Already have an account?'
-      backButtonHref='/auth/login'
+      backButtonHref={LOGIN_PATH}
       showSocial
     >
       <Form {...form}>
