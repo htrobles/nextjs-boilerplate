@@ -1,4 +1,7 @@
-import { auth } from '@/auth';
+import NextAuth from 'next-auth';
+import authConfig from './auth.config';
+
+const { auth } = NextAuth(authConfig);
 
 // Guide to protected routes found here: https://authjs.dev/getting-started/session-management/protecting?framework=express#nextjs-middleware
 
