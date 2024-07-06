@@ -103,6 +103,26 @@ export const RegisterForm = () => {
                       disabled={isPending}
                       placeholder='******'
                       type='password'
+                      autoComplete='off'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='confirmPassword'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder='******'
+                      type='password'
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
