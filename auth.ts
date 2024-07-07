@@ -9,6 +9,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   callbacks: {
+    signIn: async ({ user, account }) => {
+      if (account?.provider !== 'credentials') return true;
+
+      const existingUser = await getUserById(user.id as string);
+
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
     session: async ({ token, session }) => {
       if (token.sub && session.user) {
         session.user.id = token.sub;
