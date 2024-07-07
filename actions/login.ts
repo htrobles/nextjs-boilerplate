@@ -10,8 +10,6 @@ import { AuthError } from 'next-auth';
 import { z } from 'zod';
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
-  console.log('XXX LOGIN XXX');
-
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
