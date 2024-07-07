@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { ResetPasswordSchema } from '@/schemas';
+import { NewPasswordSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -18,25 +18,30 @@ import { FormError } from '../formError';
 import { FormSuccess } from '../formSuccess';
 import { useState, useTransition } from 'react';
 import { z } from 'zod';
-import { resetPassword } from '@/actions/resetPassword';
+import { useSearchParams } from 'next/navigation';
+import { newPassword } from '@/actions/newPassword';
 
-export const ResetPasswordForm = () => {
+export const NewPasswordForm = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof ResetPasswordSchema>>({
-    resolver: zodResolver(ResetPasswordSchema),
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
-  const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
+  const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
     setError('');
     setSuccess('');
 
     startTransition(() => {
-      resetPassword(values).then((data) => {
+      newPassword(values, token).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
       });
@@ -45,7 +50,7 @@ export const ResetPasswordForm = () => {
 
   return (
     <CardWrapper
-      headerLabel='Forgot your password?'
+      headerLabel='Enter your new password'
       backButtonLabel='Go back to Login'
       backButtonHref='/auth/login'
     >
@@ -54,16 +59,34 @@ export const ResetPasswordForm = () => {
           <div className='space-y-4'>
             <FormField
               control={form.control}
-              name='email'
+              name='password'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>New Password</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder='john.doe@example.com'
-                      type='email'
+                      type='password'
+                      placeholder='******'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='confirmPassword'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      type='password'
+                      placeholder='******'
                     />
                   </FormControl>
                   <FormMessage />
