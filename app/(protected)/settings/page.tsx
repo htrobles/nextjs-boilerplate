@@ -1,10 +1,10 @@
 'use client';
 
 import { logout } from '@/actions/logout';
-import { useCurrentSession } from '@/hooks/useCurrentSession';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 const SettingsPage = () => {
-  const { session } = useCurrentSession();
+  const user = useCurrentUser();
 
   const handleLogout = () => {
     logout();
@@ -12,7 +12,7 @@ const SettingsPage = () => {
 
   return (
     <div>
-      {JSON.stringify(session)}
+      {JSON.stringify(user)}
       <button type='submit' onClick={handleLogout}>
         Logout
       </button>
