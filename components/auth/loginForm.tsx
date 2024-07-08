@@ -21,6 +21,7 @@ import { useState, useTransition } from 'react';
 import { z } from 'zod';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import PinInput from '@/components/auth/pinInput';
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -33,6 +34,8 @@ export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
+  const [code, setCode] = useState('');
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -44,6 +47,10 @@ export const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
+
+    if (showTwoFactor) {
+      values.code = code;
+    }
 
     startTransition(() => {
       login(values)
@@ -126,26 +133,7 @@ export const LoginForm = () => {
                 />
               </>
             )}
-            {showTwoFactor && (
-              <FormField
-                control={form.control}
-                name='code'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Verification Code</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder='123456'
-                        autoComplete='false'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            {showTwoFactor && <PinInput onChange={setCode} value={code} />}
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
