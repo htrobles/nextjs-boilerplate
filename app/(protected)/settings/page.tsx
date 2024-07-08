@@ -1,20 +1,21 @@
-import { auth, signOut } from '@/auth';
-import { LOGIN_PATH } from '@/routes';
+'use client';
 
-const SettingsPage = async () => {
-  const session = await auth();
+import { logout } from '@/actions/logout';
+import { useCurrentSession } from '@/hooks/useCurrentSession';
+
+const SettingsPage = () => {
+  const { session } = useCurrentSession();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div>
       {JSON.stringify(session)}
-      <form
-        action={async () => {
-          'use server';
-          await signOut({ redirectTo: LOGIN_PATH });
-        }}
-      >
-        <button type='submit'>Logout</button>
-      </form>
+      <button type='submit' onClick={handleLogout}>
+        Logout
+      </button>
     </div>
   );
 };
